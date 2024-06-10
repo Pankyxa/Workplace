@@ -1,0 +1,63 @@
+﻿@page "/"
+@inject IDataService data
+
+<PageTitle>Список задач</PageTitle>
+
+<h3>Спиок задач</h3>
+
+@if (tasks == null)
+{
+    <p>Loading ...</p>
+}
+else
+{
+    <TaskModal @ref="TaskModal" OnSubmit="OnSubmitHandler" />
+
+    <div class="mb-3">
+        <button type="button" class="btn btn-success" @onclick="OnAddHandler">
+            Новая задача
+        </button>
+    </div>
+    <div>
+        @foreach (var taskItem in tasks)
+        {
+            <div class="card">
+                <TaskCard TaskItem="taskItem"
+                    OnUpdate="async () => await OnUpdateHandler(taskItem)"
+                    OnDelete="async () => await OnDeleteHandler(taskItem.Id)" />
+            </div>
+            <br />
+        }
+    </div>
+}
+
+@code {
+    TaskModal? TaskModal { get; set; }
+
+    IEnumerable<TaskItemDTO>? tasks;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        tasks = await data.GetAllAsync();
+    }
+
+    async Task OnAddHandler()
+    {
+        await Task.Run(() => TaskModal!.Open(new()));
+    }
+
+    async Task OnUpdateHandler(TaskItemDTO taskItem)
+    {
+        await Task.Run(() => TaskModal!.Open(taskItem));
+    }
+
+    async Task OnSubmitHandler(TaskItemDTO taskItem)
+    {
+        await data.UpdateAsync(taskItem);
+    }
+    
+    async Task OnDeleteHandler(int taskItemId)
+    {
+        await data.DeleteAsync(taskItemId);
+    }
+}

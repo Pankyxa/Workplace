@@ -1,0 +1,64 @@
+﻿@inject IDataService data
+
+<div class="card border-primary border-3">
+    <div class="card-header bg-transparent border-primary">
+        <h5 class="card-title">@TaskItem!.Name</h5>
+        <h6 class="card-subtitle mb-2 text-body-secondary">@TaskItem!.Theme</h6>
+        <p class="card-text">@TaskItem.Description</p>
+    </div>
+    <div class="card-body">
+        @if (TaskItem.StartTime.HasValue && TaskItem.EndTime.HasValue)
+        {
+            <div>
+                <small class="text-secondary">
+                    Начало: @TaskItem.StartTime!.Value.ToString("g")
+                </small>
+            </div>
+            <div>
+                <small class="text-secondary">
+                    Конец: @TaskItem.EndTime!.Value.ToString("g")
+                </small>
+            </div>
+        }
+        @if (@TaskItem.UpdateTime.HasValue)
+        {
+            <div>
+                <small class="text-secondary">
+                    Последнее изменение: @TaskItem.UpdateTime.Value.ToString("g")
+                </small>
+            </div>
+        }
+    </div>
+    <div class="card-footer bg-transparent border-primary">
+        <button type="button" class="btn btn-primary" @onclick="async () => await OnUpdateHandler(TaskItem.Id)">Изменить</button>
+        <button type="button" class="btn btn-danger" @onclick="async () => await OnDeleteHandler(TaskItem.Id)">Удалить</button>
+    </div>
+</div>
+
+@code {
+    [Parameter, EditorRequired]
+    public TaskItemDTO? TaskItem { get; set; }
+
+    IEnumerable<TaskItemDTO>? tasks;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        tasks = await data.GetAllAsync();
+    }
+
+    [Parameter, EditorRequired]
+    public EventCallback<int> OnUpdate { get; set; }
+
+    [Parameter, EditorRequired]
+    public EventCallback<int> OnDelete { get; set; }
+
+    async Task OnUpdateHandler(int id)
+    {
+        await OnUpdate.InvokeAsync(id);
+    }
+
+    async Task OnDeleteHandler(int id)
+    {
+        await OnDelete.InvokeAsync(id);
+    }
+}
