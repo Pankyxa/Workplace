@@ -3,33 +3,29 @@
 <div class="card border-primary border-3">
     <div class="card-header bg-transparent border-primary">
         <h5 class="card-title">@TaskItem!.Name</h5>
-        <h6 class="card-subtitle mb-2 text-body-secondary">@TaskItem!.Theme</h6>
-        <p class="card-text">@TaskItem.Description</p>
+        <p class="card-text">@TaskItem!.Description</p>
     </div>
     <div class="card-body">
         @if (TaskItem.StartTime.HasValue && TaskItem.EndTime.HasValue)
         {
-            <div>
-                <small class="text-secondary">
-                    Начало: @TaskItem.StartTime!.Value.ToString("g")
-                </small>
-            </div>
-            <div>
-                <small class="text-secondary">
-                    Конец: @TaskItem.EndTime!.Value.ToString("g")
-                </small>
-            </div>
+            <p class="card-text">
+                Время: @TaskItem.StartTime!.Value.ToString("t") - @TaskItem.EndTime!.Value.ToString("t")
+            </p>
         }
-        @if (@TaskItem.UpdateTime.HasValue)
+        @if (TaskItem.Location != string.Empty)
         {
-            <div>
-                <small class="text-secondary">
-                    Последнее изменение: @TaskItem.UpdateTime.Value.ToString("g")
-                </small>
-            </div>
+            <p class="card-text">
+                Место: @TaskItem.Location
+            </p>
         }
     </div>
     <div class="card-footer bg-transparent border-primary">
+        @* <button>
+            <i class="bi bi-bell"></i>
+        </button>
+        <button>
+            <i class="bi bi"></i>
+        </button> *@
         <button type="button" class="btn btn-primary" @onclick="async () => await OnUpdateHandler(TaskItem.Id)">Изменить</button>
         <button type="button" class="btn btn-danger" @onclick="async () => await OnDeleteHandler(TaskItem.Id)">Удалить</button>
     </div>

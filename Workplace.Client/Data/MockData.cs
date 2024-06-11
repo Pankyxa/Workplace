@@ -8,26 +8,26 @@ namespace Workplace.Client.Data
             new TaskItemDTO() {
                 Id = 1,
                 Name = "Задача 1",
-                Theme = "Тема 1",
                 Description = "Описание 1",
                 StartTime = DateTime.Now.AddDays(1),
-                EndTime = DateTime.Now.AddDays(2)
+                EndTime = DateTime.Now.AddDays(2),
+                Location = "Место",
             },
             new TaskItemDTO() {
                 Id = 2,
                 Name = "Задача 2",
-                Theme = "Тема 2",
                 Description = "Описание 2",
                 StartTime = DateTime.Now.AddDays(2),
-                EndTime = DateTime.Now.AddDays(3)
+                EndTime = DateTime.Now.AddDays(3),
+                Location = "Место",
             },
             new TaskItemDTO() {
                 Id = 3,
                 Name = "Задача 3",
-                Theme = "Тема 3",
                 Description = "Описание 3",
                 StartTime = DateTime.Now.AddDays(3),
-                EndTime = DateTime.Now.AddDays(4)
+                EndTime = DateTime.Now.AddDays(4),
+                Location = "Место",
             },
         ];
 
