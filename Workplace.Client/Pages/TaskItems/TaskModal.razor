@@ -11,12 +11,6 @@
             </div>
             <br />
             <div class="form-group">
-                <label for="theme">@DisplayName(() => TaskItem!.Theme)</label>
-                <InputText @bind-Value="TaskItem!.Theme" class="form-control" id="theme" />
-                <ValidationMessage For="@(() => TaskItem!.Theme)" />
-            </div>
-            <br />
-            <div class="form-group">
                 <label for="desc">@DisplayName(() => TaskItem.Description)</label>
                 <InputTextArea @bind-Value="TaskItem.Description" class="form-control" id="desc" />
                 <ValidationMessage For="@(() => TaskItem.Description)" />
@@ -32,6 +26,12 @@
                 <label for="end">@DisplayName(() => TaskItem.EndTime)</label>
                 <InputDate Type="InputDateType.DateTimeLocal" @bind-Value="TaskItem.EndTime" class="form-control" id="end" />
                 <ValidationMessage For="@(() => TaskItem.EndTime)" />
+            </div>
+            <br />
+            <div class="form-group">
+                <label for="loc">@DisplayName(() => TaskItem.Location)</label>
+                <InputText @bind-Value="TaskItem.Location" class="form-control" id="loc" />
+                <ValidationMessage For="@(() => TaskItem!.Location)" />
             </div>
             <br />
             <button type="submit" class="btn btn-primary">Сохранить</button>
@@ -69,11 +69,10 @@
         TaskItemDTO taskCopy = new();
         taskCopy!.Id = taskItem.Id;
         taskCopy!.Name = taskItem.Name;
-        taskCopy!.Theme = taskItem.Theme;
         taskCopy!.Description = taskItem.Description;
         taskCopy!.StartTime = taskItem.StartTime;
         taskCopy!.EndTime = taskItem.EndTime;
-        taskCopy!.Deadline = taskItem.Deadline;
+        taskCopy!.Location = taskItem.Location;
         return taskCopy;
     }
 }
