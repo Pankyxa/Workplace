@@ -13,6 +13,7 @@
                 {
                     <div class="card">
                         <TaskCard TaskItem="taskItem"
+                                  OnFavorite="async () => await OnFavorite!(taskItem)"
                                   OnUpdate="async () => await OnUpdate!(taskItem)"
                                   OnDelete="async () => await OnDelete!(taskItem.Id)"/>
                     </div>
@@ -26,6 +27,8 @@
     [Parameter] public string Header { get; set; } = default!;
 
     [Parameter] public IEnumerable<TaskItemDTO> Tasks { get; set; } = default!;
+
+    [Parameter] public Func<TaskItemDTO, Task>? OnFavorite { get; set; }
 
     [Parameter] public Func<TaskItemDTO, Task>? OnUpdate { get; set; }
 

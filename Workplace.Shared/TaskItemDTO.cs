@@ -33,5 +33,7 @@ namespace Workplace.Shared
         [Required(ErrorMessage = "Требуется указать место проведения")]
         [Display(Name = "Место проведения")]
         public string? Location { get; set; }
+
+        public bool IsFavorite { get; set; } = false;
     }
 }

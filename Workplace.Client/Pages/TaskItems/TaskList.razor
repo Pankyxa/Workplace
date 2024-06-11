@@ -20,7 +20,7 @@ else
         </button>
     </div>
     
-    <TaskListGroups Tasks="_tasks" OnUpdate="OnUpdateHandler" OnDelete="OnDeleteHandler" />
+    <TaskListGroups Tasks="_tasks" OnFavorite="OnFavoriteHandler" OnUpdate="OnUpdateHandler" OnDelete="OnDeleteHandler" />
 }
 
 @code {
@@ -36,6 +36,12 @@ else
     async Task OnAddHandler()
     {
         await Task.Run(() => TaskModal!.Open(new TaskItemDTO()));
+    }
+
+    async Task OnFavoriteHandler(TaskItemDTO taskItem)
+    {
+        taskItem.IsFavorite = !taskItem.IsFavorite;
+        _tasks = await data.GetAllAsync(); // Обновить список задач после обновления
     }
 
     async Task OnUpdateHandler(TaskItemDTO taskItem)
