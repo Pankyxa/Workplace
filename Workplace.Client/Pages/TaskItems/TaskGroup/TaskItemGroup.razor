@@ -1,5 +1,5 @@
 <div>
-    <h3 class="card-header" @onclick="ToggleVisibility">@Header</h3>
+    <h3 type="button" class="card-header border-3" @onclick="ToggleVisibility">@Header</h3>
     @if (ShowTasks)
     {
         @if (!Tasks.Any())
