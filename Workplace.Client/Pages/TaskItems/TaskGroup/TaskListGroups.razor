@@ -1,0 +1,20 @@
+<div>
+    <TaskItemGroup Header="Сегодня" Tasks="TodayTasks" OnUpdate="OnUpdate" OnDelete="OnDelete" ShowTasks="true"/>
+    <TaskItemGroup Header="Завтра" Tasks="TomorrowTasks" OnUpdate="OnUpdate" OnDelete="OnDelete" ShowTasks="false"/>
+    <TaskItemGroup Header="Послезавтра" Tasks="DayAfterTomorrowTasks" OnUpdate="OnUpdate" OnDelete="OnDelete" ShowTasks="false"/>
+</div>
+
+@code {
+    [Parameter]
+    public IEnumerable<TaskItemDTO>? Tasks { get; set; }
+
+    [Parameter]
+    public Func<TaskItemDTO, Task>? OnUpdate { get; set; }
+
+    [Parameter]
+    public Func<int, Task>? OnDelete { get; set; }
+
+    private IEnumerable<TaskItemDTO> TodayTasks => Tasks!.Where(t => t.StartTime!.Value.Date == DateTime.Today);
+    private IEnumerable<TaskItemDTO> TomorrowTasks => Tasks!.Where(t => t.StartTime!.Value.Date == DateTime.Today.AddDays(1));
+    private IEnumerable<TaskItemDTO> DayAfterTomorrowTasks => Tasks!.Where(t => t.StartTime!.Value.Date == DateTime.Today.AddDays(2));
+}

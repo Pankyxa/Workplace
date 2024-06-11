@@ -101,3 +101,16 @@ a, .btn-link {
 code {
     color: #c02d76;
 }
+
+.vertical-card-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.vertical-card-group .card {
+    margin-bottom: 10px; /* Добавляет отступ между карточками */
+}
+
+.card-header {
+    cursor: pointer;
+}

@@ -10,7 +10,7 @@ namespace Workplace.Client.Data
                 Name = "Задача 1",
                 Theme = "Тема 1",
                 Description = "Описание 1",
-                StartTime = DateTime.Now.AddDays(1),
+                StartTime = DateTime.Now,
                 EndTime = DateTime.Now.AddDays(2)
             },
             new TaskItemDTO() {
@@ -18,7 +18,7 @@ namespace Workplace.Client.Data
                 Name = "Задача 2",
                 Theme = "Тема 2",
                 Description = "Описание 2",
-                StartTime = DateTime.Now.AddDays(2),
+                StartTime = DateTime.Now.AddDays(1),
                 EndTime = DateTime.Now.AddDays(3)
             },
             new TaskItemDTO() {
@@ -26,7 +26,7 @@ namespace Workplace.Client.Data
                 Name = "Задача 3",
                 Theme = "Тема 3",
                 Description = "Описание 3",
-                StartTime = DateTime.Now.AddDays(3),
+                StartTime = DateTime.Now.AddDays(1),
                 EndTime = DateTime.Now.AddDays(4)
             },
         ];

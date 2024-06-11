@@ -1,11 +1,12 @@
 ﻿@page "/"
+@using Workplace.Client.Pages.TaskItems.TaskGroup
 @inject IDataService data
 
 <PageTitle>Список задач</PageTitle>
 
-<h3>Спиок задач</h3>
+<h3>Список задач</h3>
 
-@if (tasks == null)
+@if (_tasks == null)
 {
     <p>Loading ...</p>
 }
@@ -18,32 +19,23 @@ else
             Новая задача
         </button>
     </div>
-    <div>
-        @foreach (var taskItem in tasks)
-        {
-            <div class="card">
-                <TaskCard TaskItem="taskItem"
-                    OnUpdate="async () => await OnUpdateHandler(taskItem)"
-                    OnDelete="async () => await OnDeleteHandler(taskItem.Id)" />
-            </div>
-            <br />
-        }
-    </div>
+    
+    <TaskListGroups Tasks="_tasks" OnUpdate="OnUpdateHandler" OnDelete="OnDeleteHandler" />
 }
 
 @code {
     TaskModal? TaskModal { get; set; }
 
-    IEnumerable<TaskItemDTO>? tasks;
+    IEnumerable<TaskItemDTO>? _tasks;
 
     protected override async Task OnParametersSetAsync()
     {
-        tasks = await data.GetAllAsync();
+        _tasks = await data.GetAllAsync();
     }
 
     async Task OnAddHandler()
     {
-        await Task.Run(() => TaskModal!.Open(new()));
+        await Task.Run(() => TaskModal!.Open(new TaskItemDTO()));
     }
 
     async Task OnUpdateHandler(TaskItemDTO taskItem)
@@ -54,10 +46,12 @@ else
     async Task OnSubmitHandler(TaskItemDTO taskItem)
     {
         await data.UpdateAsync(taskItem);
+        _tasks = await data.GetAllAsync(); // Обновить список задач после обновления
     }
     
     async Task OnDeleteHandler(int taskItemId)
     {
         await data.DeleteAsync(taskItemId);
+        _tasks = await data.GetAllAsync(); // Обновить список задач после удаления
     }
 }
