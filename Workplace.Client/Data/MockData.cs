@@ -11,8 +11,8 @@ namespace Workplace.Client.Data
                 Description = "Описание 1",
                 StartTime = DateTime.Now.AddDays(1),
                 EndTime = DateTime.Now.AddDays(2),
-                Location = "Место",
-                Teacher = "Преподаватель"
+                Location = "Место 1",
+                Teacher = "Преподаватель 1"
             },
             new TaskItemDTO() {
                 Id = 2,
@@ -20,8 +20,8 @@ namespace Workplace.Client.Data
                 Description = "Описание 2",
                 StartTime = DateTime.Now.AddDays(2),
                 EndTime = DateTime.Now.AddDays(3),
-                Location = "Место",
-                Teacher = "Преподаватель"
+                Location = "Место 2",
+                Teacher = "Преподаватель 2"
             },
             new TaskItemDTO() {
                 Id = 3,
@@ -29,8 +29,8 @@ namespace Workplace.Client.Data
                 Description = "Описание 3",
                 StartTime = DateTime.Now.AddDays(3),
                 EndTime = DateTime.Now.AddDays(4),
-                Location = "Место",
-                Teacher = "Преподаватель"
+                Location = "Место 3",
+                Teacher = "Преподаватель 3"
             },
         ];
 

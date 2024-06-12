@@ -34,6 +34,7 @@ namespace Workplace.Shared
         [Display(Name = "Место проведения")]
         public string? Location { get; set; }
 
+        [Required(ErrorMessage = "Требуется указать преподавателя")]
         [Display(Name = "Преподаватель")]
         public string? Teacher { get; set; }
 
