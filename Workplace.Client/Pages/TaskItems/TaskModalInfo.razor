@@ -1,10 +1,27 @@
 <Modal @ref="Modal">
     <Title>@TaskItem!.Name</Title>
     <Body>
-    <p>ААААА</p>
+        <ul class="list-group">
+            <li class="list-group-item" aria-disabled="true">
+                <label class="fw-bold" for="desc">@DisplayName(() => TaskItem!.Description)</label>
+                <div id="desc">@TaskItem!.Description</div>
+            </li>
+            <li class="list-group-item" aria-disabled="true">
+                <label class="fw-bold" for="teacher">@DisplayName(() => TaskItem!.Teacher)</label>
+                <div id="teacher">@TaskItem!.Teacher</div>
+            </li>
+            <li class="list-group-item" aria-disabled="true">
+                <label class="fw-bold" for="time">Время проведения</label>
+                <div id="time">@TaskItem.StartTime!.Value.ToString("t") - @TaskItem.EndTime!.Value.ToString("t")</div>
+            </li>
+            <li class="list-group-item" aria-disabled="true">
+                <label class="fw-bold" for="loc">@DisplayName(() => TaskItem!.Location)</label>
+                <div id="loc">@TaskItem!.Location</div>
+            </li>
+        </ul>
     </Body>
     <Footer>
-        <button type="button" @onclick="Cancel">Закрыть</button>
+        <button type="button" class="btn btn-danger" @onclick="Cancel">Закрыть</button>
     </Footer>
 </Modal>
 
@@ -41,6 +58,7 @@ taskCopy!.Description = taskItem.Description;
 taskCopy!.StartTime = taskItem.StartTime;
 taskCopy!.EndTime = taskItem.EndTime;
 taskCopy!.Location = taskItem.Location;
+taskCopy!.Teacher = taskItem.Teacher;
 return taskCopy;
 }
 }

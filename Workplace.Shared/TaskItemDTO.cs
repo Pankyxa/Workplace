@@ -34,6 +34,9 @@ namespace Workplace.Shared
         [Display(Name = "Место проведения")]
         public string? Location { get; set; }
 
+        [Display(Name = "Преподаватель")]
+        public string? Teacher { get; set; }
+
         public bool IsFavorite { get; set; } = false;
     }
 }

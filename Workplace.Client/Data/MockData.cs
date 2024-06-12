@@ -12,6 +12,7 @@ namespace Workplace.Client.Data
                 StartTime = DateTime.Now.AddDays(1),
                 EndTime = DateTime.Now.AddDays(2),
                 Location = "Место",
+                Teacher = "Преподаватель"
             },
             new TaskItemDTO() {
                 Id = 2,
@@ -20,6 +21,7 @@ namespace Workplace.Client.Data
                 StartTime = DateTime.Now.AddDays(2),
                 EndTime = DateTime.Now.AddDays(3),
                 Location = "Место",
+                Teacher = "Преподаватель"
             },
             new TaskItemDTO() {
                 Id = 3,
@@ -28,6 +30,7 @@ namespace Workplace.Client.Data
                 StartTime = DateTime.Now.AddDays(3),
                 EndTime = DateTime.Now.AddDays(4),
                 Location = "Место",
+                Teacher = "Преподаватель"
             },
         ];
 
