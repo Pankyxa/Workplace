@@ -1,5 +1,5 @@
 <div>
-    <h3 class="card-header" @onclick="ToggleVisibility">@Header</h3>
+    <h3 type="button" class="card-header border-3" @onclick="ToggleVisibility">@Header</h3>
     @if (ShowTasks)
     {
         @if (!Tasks.Any())
@@ -13,6 +13,7 @@
                 {
                     <div class="card">
                         <TaskCard TaskItem="taskItem"
+                                  OnFavorite="async () => await OnFavorite!(taskItem)"
                                   OnUpdate="async () => await OnUpdate!(taskItem)"
                                   OnDelete="async () => await OnDelete!(taskItem.Id)"
                                   OnInfo="async () => await OnInfo!(taskItem)"/>
@@ -27,6 +28,8 @@
     [Parameter] public string Header { get; set; } = default!;
 
     [Parameter] public IEnumerable<TaskItemDTO> Tasks { get; set; } = default!;
+
+    [Parameter] public Func<TaskItemDTO, Task>? OnFavorite { get; set; }
 
     [Parameter] public Func<TaskItemDTO, Task>? OnUpdate { get; set; }
     

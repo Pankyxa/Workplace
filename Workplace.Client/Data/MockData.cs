@@ -50,7 +50,7 @@ namespace Workplace.Client.Data
 
         public async Task<IEnumerable<TaskItemDTO>> GetAllAsync()
         {
-            return await Task.FromResult<IEnumerable<TaskItemDTO>>(tasks.OrderBy(task => task.StartTime));
+            return await Task.FromResult<IEnumerable<TaskItemDTO>>(tasks.OrderByDescending(task => task.IsFavorite).ThenBy(task => task.StartTime));
         }
 
         public async Task<TaskItemDTO> GetTaskItemAsync(int Id)
