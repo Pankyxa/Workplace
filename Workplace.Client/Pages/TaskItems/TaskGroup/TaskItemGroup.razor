@@ -14,7 +14,8 @@
                     <div class="card">
                         <TaskCard TaskItem="taskItem"
                                   OnUpdate="async () => await OnUpdate!(taskItem)"
-                                  OnDelete="async () => await OnDelete!(taskItem.Id)"/>
+                                  OnDelete="async () => await OnDelete!(taskItem.Id)"
+                                  OnInfo="async () => await OnInfo!(taskItem)"/>
                     </div>
                 }
             </div>
@@ -28,6 +29,8 @@
     [Parameter] public IEnumerable<TaskItemDTO> Tasks { get; set; } = default!;
 
     [Parameter] public Func<TaskItemDTO, Task>? OnUpdate { get; set; }
+    
+    [Parameter] public Func<TaskItemDTO, Task>? OnInfo { get; set; }
 
     [Parameter] public Func<int, Task>? OnDelete { get; set; }
     

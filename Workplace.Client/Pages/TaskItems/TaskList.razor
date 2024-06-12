@@ -13,6 +13,7 @@
 else
 {
     <TaskModal @ref="TaskModal" OnSubmit="OnSubmitHandler" />
+    <TaskModalInfo @ref="TaskModalInfo" OnSubmit="OnSubmitHandler" />
 
     <div class="mb-3">
         <button type="button" class="btn btn-success" @onclick="OnAddHandler">
@@ -20,11 +21,12 @@ else
         </button>
     </div>
     
-    <TaskListGroups Tasks="_tasks" OnUpdate="OnUpdateHandler" OnDelete="OnDeleteHandler" />
+    <TaskListGroups Tasks="_tasks" OnUpdate="OnUpdateHandler" OnDelete="OnDeleteHandler" OnInfo="OnInfoHandler"/>
 }
 
 @code {
     TaskModal? TaskModal { get; set; }
+    TaskModalInfo? TaskModalInfo { get; set; }
 
     IEnumerable<TaskItemDTO>? _tasks;
 
@@ -53,5 +55,10 @@ else
     {
         await data.DeleteAsync(taskItemId);
         _tasks = await data.GetAllAsync(); // Обновить список задач после удаления
+    }
+    
+    async Task OnInfoHandler(TaskItemDTO taskItem)
+    {
+        await Task.Run(() => TaskModalInfo!.Open(taskItem));
     }
 }

@@ -114,3 +114,13 @@ code {
 .card-header {
     cursor: pointer;
 }
+
+.task-card {
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.task-card:hover {
+    background-color: rgba(193, 193, 236, 0.56); /* Цвет при наведении */
+}
+

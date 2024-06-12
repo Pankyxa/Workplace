@@ -1,7 +1,7 @@
 <div>
-    <TaskItemGroup Header="Сегодня" Tasks="TodayTasks" OnUpdate="OnUpdate" OnDelete="OnDelete" ShowTasks="true"/>
-    <TaskItemGroup Header="Завтра" Tasks="TomorrowTasks" OnUpdate="OnUpdate" OnDelete="OnDelete" ShowTasks="false"/>
-    <TaskItemGroup Header="Послезавтра" Tasks="DayAfterTomorrowTasks" OnUpdate="OnUpdate" OnDelete="OnDelete" ShowTasks="false"/>
+    <TaskItemGroup Header="Сегодня" Tasks="TodayTasks" OnUpdate="OnUpdate" OnDelete="OnDelete" OnInfo="OnInfo" ShowTasks="true"/>
+    <TaskItemGroup Header="Завтра" Tasks="TomorrowTasks" OnUpdate="OnUpdate" OnDelete="OnDelete" OnInfo="OnInfo" ShowTasks="false"/>
+    <TaskItemGroup Header="Послезавтра" Tasks="DayAfterTomorrowTasks" OnUpdate="OnUpdate" OnDelete="OnDelete" OnInfo="OnInfo" ShowTasks="false"/>
 </div>
 
 @code {
@@ -10,6 +10,9 @@
 
     [Parameter]
     public Func<TaskItemDTO, Task>? OnUpdate { get; set; }
+
+    [Parameter]
+    public Func<TaskItemDTO, Task>? OnInfo { get; set; }
 
     [Parameter]
     public Func<int, Task>? OnDelete { get; set; }

@@ -7,6 +7,9 @@
             <div class="modal-body">
                 @Body
             </div>
+            <div class="modal-footer">
+                @Footer
+            </div>
         </div>
     </div>
 </div>
@@ -22,6 +25,9 @@
 
     [Parameter]
     public RenderFragment? Body { get; set; }
+    
+    [Parameter]
+    public RenderFragment? Footer { get; set; }
 
     string modalDisplay = "none;";
     string modalClass = "";

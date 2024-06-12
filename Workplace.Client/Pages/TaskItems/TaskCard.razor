@@ -1,6 +1,6 @@
 ﻿@inject IDataService data
 
-<div class="card border-primary border-3">
+<div class="card border-primary border-3 task-card" type="button" @onclick="HandleCardClick">
     <div class="card-header bg-transparent border-primary">
         <h5 class="card-title">@TaskItem!.Name</h5>
         <p class="card-text">@TaskItem!.Description</p>
@@ -20,14 +20,8 @@
         }
     </div>
     <div class="card-footer bg-transparent border-primary">
-        @* <button>
-            <i class="bi bi-bell"></i>
-        </button>
-        <button>
-            <i class="bi bi"></i>
-        </button> *@
-        <button type="button" class="btn btn-primary" @onclick="async () => await OnUpdateHandler(TaskItem.Id)">Изменить</button>
-        <button type="button" class="btn btn-danger" @onclick="async () => await OnDeleteHandler(TaskItem.Id)">Удалить</button>
+        <button type="button" class="btn btn-primary" @onclick:stopPropagation="true" @onclick="async () => await OnUpdateHandler(TaskItem.Id)">Изменить</button>
+        <button type="button" class="btn btn-danger" @onclick:stopPropagation="true" @onclick="async () => await OnDeleteHandler(TaskItem.Id)">Удалить</button>
     </div>
 </div>
 
@@ -48,6 +42,9 @@
     [Parameter, EditorRequired]
     public EventCallback<int> OnDelete { get; set; }
 
+    [Parameter, EditorRequired]
+    public EventCallback<int> OnInfo { get; set; }
+
     async Task OnUpdateHandler(int id)
     {
         await OnUpdate.InvokeAsync(id);
@@ -56,5 +53,18 @@
     async Task OnDeleteHandler(int id)
     {
         await OnDelete.InvokeAsync(id);
+    }
+
+    async Task OnInfoHandler(int id)
+    {
+        await OnInfo.InvokeAsync(id);
+    }
+
+    private async Task HandleCardClick()
+    {
+        if (TaskItem != null)
+        {
+            await OnInfoHandler(TaskItem.Id);
+        }
     }
 }
