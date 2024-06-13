@@ -1,23 +1,29 @@
-<div>
-    <h3 type="button" class="card-header border-3" @onclick="ToggleVisibility">@Header</h3>
+<div class="accordion-item">
+    <div class="accordion-header">
+        <button type="button" class="accordion-button @AccordStyle" @onclick="ToggleVisibility">
+            <h3>
+                @Header
+            </h3>
+        </button>
+    </div>
     @if (ShowTasks)
     {
         @if (!Tasks.Any())
         {
-            <p>Похоже на этот день нет задач. Хотите добавить?</p>
+            <div class="accordion-body">
+                <h4>Похоже на этот день нет задач. Хотите добавить?</h4>
+            </div>
         }
         else
         {
-            <div class="vertical-card-group">
+            <div class="accordion-body vertical-card-group">
                 @foreach (var taskItem in Tasks)
                 {
-                    <div class="card">
-                        <TaskCard TaskItem="taskItem"
-                                  OnFavorite="async () => await OnFavorite!(taskItem)"
-                                  OnUpdate="async () => await OnUpdate!(taskItem)"
-                                  OnDelete="async () => await OnDelete!(taskItem.Id)"
-                                  OnInfo="async () => await OnInfo!(taskItem)"/>
-                    </div>
+                    <TaskCard TaskItem="taskItem"
+                              OnFavorite="async () => await OnFavorite!(taskItem)"
+                              OnUpdate="async () => await OnUpdate!(taskItem)"
+                              OnDelete="async () => await OnDelete!(taskItem.Id)"
+                              OnInfo="async () => await OnInfo!(taskItem)"/>
                 }
             </div>
         }
@@ -32,17 +38,39 @@
     [Parameter] public Func<TaskItemDTO, Task>? OnFavorite { get; set; }
 
     [Parameter] public Func<TaskItemDTO, Task>? OnUpdate { get; set; }
-    
+
     [Parameter] public Func<TaskItemDTO, Task>? OnInfo { get; set; }
 
     [Parameter] public Func<int, Task>? OnDelete { get; set; }
-    
+
     [Parameter]
     public bool ShowTasks { get; set; }
+
+    private string? AccordStyle;
+    
+    protected override void OnInitialized()
+    {
+        if (ShowTasks)
+        {
+            AccordStyle = "";
+        }
+        else
+        {
+            AccordStyle = "collapsed";
+        }
+    }
 
     private void ToggleVisibility()
     {
         ShowTasks = !ShowTasks;
+        if (ShowTasks)
+        {
+            AccordStyle = "";
+        }
+        else
+        {
+            AccordStyle = "collapsed";
+        }
     }
 
 }

@@ -124,3 +124,12 @@ code {
     background-color: rgba(193, 193, 236, 0.56); /* Цвет при наведении */
 }
 
+.button-without-outline:active {
+    outline: none !important; /* Отключение обвода кнопки */
+    box-shadow: none !important;
+}
+
+.button-without-outline:focus {
+    outline: none !important;
+    box-shadow: none !important;
+}
