@@ -31,7 +31,7 @@
     </Body>
     <Footer>
         <button type="button" class="btn btn-danger" @onclick="Cancel">Отказаться</button>
-        <button type="button" class="btn btn-danger" @onclick="Close">Закрыть</button>
+        <button type="button" class="btn btn-secondary" @onclick="Close">Закрыть</button>
     </Footer>
 </Modal>
 
@@ -44,6 +44,7 @@
             <ValidationMessage For="@(() => reason!.Reason)" />
             <br />
             <button type="submit" class="btn btn-primary">Отправить</button>
+            <button type="button" class="btn btn-secondary" @onclick="Back">Назад</button>
         </EditForm>
     </Body>
 </Modal>
@@ -107,7 +108,7 @@
                                 </small>
                                 <br />
                                 <small class="card-text">
-                                    @taskItem.Teacher
+                                    @taskItem.Location
                                 </small>
                             </div>
                         </div>
@@ -181,6 +182,13 @@
     async Task Submit()
     {
         await Task.Run(() => ModalCancel!.Close());
+        reason.Reason = string.Empty;
+    }
+    async Task Back()
+    {
+        await Task.Run(() => ModalCancel!.Close());
+        await Task.Run(() => ModalShedule!.Open());
+        reason.Reason = string.Empty;
     }
 
     public class ReasonModel

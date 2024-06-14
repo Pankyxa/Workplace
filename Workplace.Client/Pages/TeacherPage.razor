@@ -4,69 +4,159 @@
 
 <h3>Список задач</h3>
 
+<Modal @ref="ModalShedule">
+    <Title>@taskItem!.Name</Title>
+    <Body>
+        <ul class="list-group">
+            <li class="list-group-item" aria-disabled="true">
+                <label class="fw-bold" for="desc">@DisplayName(() => taskItem!.Description)</label>
+                <div id="desc">@taskItem!.Description</div>
+            </li>
+            @if (taskItem.StartTime.HasValue && taskItem.EndTime.HasValue)
+            {
+                <li class="list-group-item" aria-disabled="true">
+                    <label class="fw-bold" for="time">Время проведения</label>
+                    <div id="time"> @taskItem.StartTime.Value.ToString("t") - @taskItem.EndTime.Value.ToString("t")</div>
+                </li>
+            }
+            <li class="list-group-item" aria-disabled="true">
+                <label class="fw-bold" for="loc">@DisplayName(() => taskItem!.Location)</label>
+                <div id="loc">@taskItem!.Location</div>
+            </li>
+            <li class="list-group-item" aria-disabled="true">
+                <label class="fw-bold">Cтуденты</label>
+                <ul class="list-inline">
+                    @for (int i = 0; i < 6; i++)
+                    {
+                        <li>@taskItem!.Teacher</li>
+                    }
+                </ul>
+            </li>
+        </ul>
+    </Body>
+    <Footer>
+        <button type="button" class="btn btn-success" @onclick="ShowQRcode">QR-код</button>
+        <button type="button" class="btn btn-danger" @onclick="Cancel">Отказаться</button>
+        <button type="button" class="btn btn-secondary" @onclick="CloseShedule">Закрыть</button>
+    </Footer>
+</Modal>
 
-<div class="mb-3">
-    <button type="button" class="btn btn-success">
-        Новая задача
-    </button>
-</div>
-@for (int i = 0; i < 3; i++)
-{
-    <div class="accordion-item">
-        <div class="accordion-header">
-            <button type="button" class="accordion-button @AccordStyle" @onclick="ToggleVisibility">
-                <h3>
-                    День
-                </h3>
-            </button>
+<Modal @ref="ModalCancel">
+    <Title>Укажите причину отказа</Title>
+    <Body>
+        <EditForm Model="reason" OnValidSubmit="Submit">
+            <DataAnnotationsValidator />
+            <InputTextArea @bind-Value="reason.Reason" class="form-control" id="teacher" />
+            <ValidationMessage For="@(() => reason!.Reason)" />
+            <br />
+            <button type="submit" class="btn btn-primary">Отправить</button>
+            <button type="button" class="btn btn-secondary" @onclick="Back">Назад</button>
+        </EditForm>
+    </Body>
+    <Footer>
+        <button type="button" class="btn btn-secondary" @onclick="Back">Назад</button>
+    </Footer>
+</Modal>
+
+<Modal @ref="ModalQR">
+    <Body>
+        <div class="justify-content-center">
+            <img class="card-img" src="https://support.dt-a.com.au/wp-content/uploads/2018/06/qr-code-rule-website.png"/>
         </div>
-        @if (ShowTasks)
-        {
-            <div class="accordion-body vertical-card-group">
-                @for (int j = 0; j < 3; j++)
-                {
-                    <div class="card border-primary border-3 task-card">
-                        <div class="card-header">
-                            <div class="row justify-content-between">
-                                <div class="col-auto">
-                                    <h5 class="card-title">Функциональный анализ</h5>
-                                </div>
-                                <div class="col-auto">
-                                    <button type="button" class="button-without-outline btn btn-primary">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16">
-                                            <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
-                                        </svg>
-                                    </button>
-                                    <button type="button" class="button-without-outline btn btn-secondary">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bell-fill" viewBox="0 0 16 16">
-                                            <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2m.995-14.901a1 1 0 1 0-1.99 0A5 5 0 0 0 3 6c0 1.098-.5 6-2 7h14c-1.5-1-2-5.902-2-7 0-2.42-1.72-4.44-4.005-4.901" />
-                                        </svg>
-                                    </button>
+    </Body>
+    <Footer>
+        <button type="button" class="btn btn-secondary" @onclick="CloseQR">Закрыть</button>
+    </Footer>
+</Modal>
+
+<div class="row">
+    <div class="col-auto">
+        <button type="button" class="btn btn-success">
+            Новая задача
+        </button>
+    </div>
+    <div class="col-auto">
+        <button type="button" class="btn btn-secondary">
+            Фильтры
+        </button>
+    </div>
+</div>
+<br />
+<div class="accordion">
+    @for (int i = 0; i < 3; i++)
+    {
+        <div class="accordion-item border-primary">
+            <div class="accordion-header">
+                <button type="button" class="accordion-button @AccordStyle" @onclick="ToggleVisibility">
+                    <h3>
+                        День
+                    </h3>
+                </button>
+            </div>
+            @if (ShowTasks)
+            {
+                <div class="accordion-body vertical-card-group">
+                    @for (int j = 0; j < 3; j++)
+                    {
+                        <div class="card border-primary border-3 task-card" @onclick="async () => await OnInfoHandler(taskItem)">
+                            <div class="card-header border-primary">
+                                <div class="row justify-content-between">
+                                    <div class="col-auto">
+                                        <h5 class="card-title">@taskItem.Name</h5>
+                                    </div>
+                                    <div class="col-auto">
+                                        <button type="button" class="button-without-outline btn btn-primary" @onclick:stopPropagation="true">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16">
+                                                <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
+                                            </svg>
+                                        </button>
+                                        <button type="button" class="button-without-outline btn btn-secondary" @onclick:stopPropagation="true">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bell-fill" viewBox="0 0 16 16">
+                                                <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2m.995-14.901a1 1 0 1 0-1.99 0A5 5 0 0 0 3 6c0 1.098-.5 6-2 7h14c-1.5-1-2-5.902-2-7 0-2.42-1.72-4.44-4.005-4.901" />
+                                            </svg>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
+                            <div class="card-body">
+                                <small class="card-text ">
+                                    @taskItem.Description
+                                </small>
+                                <br />
+                                <small class="card-text">
+                                    @taskItem.StartTime!.Value.ToString("t") - @taskItem.EndTime!.Value.ToString("t")
+                                </small>
+                                <br />
+                                <small class="card-text">
+                                    @taskItem.Location
+                                </small>
+                            </div>
                         </div>
-                        <div class="card-body">
-                            <p class="card-text">
-                                Тип пары: Лекция
-                            </p>
-                            <p class="card-text">
-                                Время: 11.00 - 13.00
-                            </p>
-                            <p class="card-text">
-                                Место: Корпус 7, аудитория 522
-                            </p>
-                        </div>
-                        <div class="card-footer bg-transparent border-primary">
-                            <button type="button" class="btn btn-primary">Изменить</button>
-                            <button type="button" class="btn btn-danger">Удалить</button>
-                        </div>
-                    </div>
-                }
-            </div>
-        }
-    </div>
-}
+                    }
+                </div>
+            }
+        </div>
+    }
+</div>
+
 @code {
+    Modal? ModalShedule { get; set; }
+    Modal? ModalCancel { get; set; }
+    Modal? ModalQR { get; set; }
+
+    ReasonModel reason = new ReasonModel();
+
+    TaskItemDTO taskItem = new TaskItemDTO()
+        {
+            Id = 1,
+            Name = "Функциональный анализ",
+            Description = "Лекция",
+            StartTime = DateTime.Now,
+            EndTime = DateTime.Now.AddHours(1.5),
+            Location = "Корпус 7, аудитория 522",
+            Teacher = "Иванов Иван Иванович"
+        };
+
     public bool ShowTasks = true;
 
     private string? AccordStyle;
@@ -96,5 +186,46 @@
         }
     }
 
+    async Task OnInfoHandler(TaskItemDTO taskItem)
+    {
+        await Task.Run(() => ModalShedule!.Open());
+    }
+    async Task Cancel()
+    {
+        await Task.Run(() => ModalShedule!.Close());
+        await Task.Run(() => ModalCancel!.Open());
+    }
+    async Task CloseShedule()
+    {
+        await Task.Run(() => ModalShedule!.Close());
+    }
 
+    async Task Submit()
+    {
+        await Task.Run(() => ModalCancel!.Close());
+        reason.Reason = string.Empty;
+    }
+    async Task Back()
+    {
+        await Task.Run(() => ModalCancel!.Close());
+        await Task.Run(() => ModalShedule!.Open());
+        reason.Reason = string.Empty;
+    }
+
+    async Task ShowQRcode()
+    {
+        await Task.Run(() => ModalShedule!.Close());
+        await Task.Run(() => ModalQR!.Open());
+    }
+    async Task CloseQR()
+    {
+        await Task.Run(() => ModalQR!.Close());
+    }
+
+    public class ReasonModel
+    {
+        [Required(ErrorMessage = "Требуется указать причину")]
+        [StringLength(1000, MinimumLength = 3, ErrorMessage = "Длина строки с именем должна быть не менее трех и не более тысячи символов")]
+        public string? Reason { get; set; }
+    }
 }

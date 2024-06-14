@@ -30,6 +30,7 @@
 
   <ItemGroup>
     <_ContentIncludedByDefault Remove="Pages\StudentPage.razor" />
+    <_ContentIncludedByDefault Remove="wwwroot\cbb94f83d35f1094c51434e07c75d806.png" />
   </ItemGroup>
 
   <ItemGroup>
