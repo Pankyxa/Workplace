@@ -4,70 +4,7 @@
 
 <h3>Список задач</h3>
 
-<Modal @ref="ModalShedule">
-    <Title>@taskItem!.Name</Title>
-    <Body>
-        <ul class="list-group">
-            <li class="list-group-item" aria-disabled="true">
-                <label class="fw-bold" for="desc">@DisplayName(() => taskItem!.Description)</label>
-                <div id="desc">@taskItem!.Description</div>
-            </li>
-            @if (taskItem.StartTime.HasValue && taskItem.EndTime.HasValue)
-            {
-                <li class="list-group-item" aria-disabled="true">
-                    <label class="fw-bold" for="time">Время проведения</label>
-                    <div id="time"> @taskItem.StartTime.Value.ToString("t") - @taskItem.EndTime.Value.ToString("t")</div>
-                </li>
-            }
-            <li class="list-group-item" aria-disabled="true">
-                <label class="fw-bold" for="loc">@DisplayName(() => taskItem!.Location)</label>
-                <div id="loc">@taskItem!.Location</div>
-            </li>
-            <li class="list-group-item" aria-disabled="true">
-                <label class="fw-bold">Cтуденты</label>
-                <ul class="list-inline">
-                    @for (int i = 0; i < 6; i++)
-                    {
-                        <li>@taskItem!.Teacher</li>
-                    }
-                </ul>
-            </li>
-        </ul>
-    </Body>
-    <Footer>
-        <button type="button" class="btn btn-success" @onclick="ShowQRcode">QR-код</button>
-        <button type="button" class="btn btn-danger" @onclick="Cancel">Отказаться</button>
-        <button type="button" class="btn btn-secondary" @onclick="CloseShedule">Закрыть</button>
-    </Footer>
-</Modal>
-
-<Modal @ref="ModalCancel">
-    <Title>Укажите причину отказа</Title>
-    <Body>
-        <EditForm Model="reason" OnValidSubmit="Submit">
-            <DataAnnotationsValidator />
-            <InputTextArea @bind-Value="reason.Reason" class="form-control" id="teacher" />
-            <ValidationMessage For="@(() => reason!.Reason)" />
-            <br />
-            <button type="submit" class="btn btn-primary">Отправить</button>
-            <button type="button" class="btn btn-secondary" @onclick="Back">Назад</button>
-        </EditForm>
-    </Body>
-    <Footer>
-        <button type="button" class="btn btn-secondary" @onclick="Back">Назад</button>
-    </Footer>
-</Modal>
-
-<Modal @ref="ModalQR">
-    <Body>
-        <div class="justify-content-center">
-            <img class="card-img" src="https://expertnov.ru/800/600/https/kelsys.by/wp-content/uploads/2021/04/blackberry-qr-code-variant_318-53463.jpg" />
-        </div>
-    </Body>
-    <Footer>
-        <button type="button" class="btn btn-secondary" @onclick="CloseQR">Закрыть</button>
-    </Footer>
-</Modal>
+<TeacherModal @ref="Modal"></TeacherModal>
 
 <div class="row">
     <div class="col-auto">
@@ -98,11 +35,11 @@
                 <div class="accordion-body vertical-card-group">
                     @for (int j = 0; j < 3; j++)
                     {
-                        <div class="card border-primary border-3 task-card" @onclick="async () => await OnInfoHandler(taskItem)">
+                        <div class="card border-primary border-3 task-card" @onclick="async () => await OnInfoHandler(TaskItem)">
                             <div class="card-header border-primary">
                                 <div class="row justify-content-between">
                                     <div class="col-auto">
-                                        <h5 class="card-title">@taskItem.Name</h5>
+                                        <h5 class="card-title">@TaskItem.Name</h5>
                                     </div>
                                     <div class="col-auto">
                                         <button type="button" class="button-without-outline btn btn-primary" @onclick:stopPropagation="true">
@@ -120,15 +57,15 @@
                             </div>
                             <div class="card-body">
                                 <small class="card-text ">
-                                    @taskItem.Description
+                                    @TaskItem.Description
                                 </small>
                                 <br />
                                 <small class="card-text">
-                                    @taskItem.StartTime!.Value.ToString("t") - @taskItem.EndTime!.Value.ToString("t")
+                                    @TaskItem.StartTime!.Value.ToString("t") - @TaskItem.EndTime!.Value.ToString("t")
                                 </small>
                                 <br />
                                 <small class="card-text">
-                                    @taskItem.Location
+                                    @TaskItem.Location
                                 </small>
                             </div>
                         </div>
@@ -140,17 +77,13 @@
 </div>
 
 @code {
-    Modal? ModalShedule { get; set; }
-    Modal? ModalCancel { get; set; }
-    Modal? ModalQR { get; set; }
+    TeacherModal? Modal { get; set; }
 
-    ReasonModel reason = new ReasonModel();
-
-    TaskItemDTO taskItem = new TaskItemDTO()
+    TaskItemDTO TaskItem = new TaskItemDTO()
         {
             Id = 1,
-            Name = "Функциональный анализ",
-            Description = "Лекция",
+            Name = "Провести пару по функциональному анализу",
+            Description = "Тип пары: лекция",
             StartTime = DateTime.Now,
             EndTime = DateTime.Now.AddHours(1.5),
             Location = "Корпус 7, аудитория 522",
@@ -188,44 +121,6 @@
 
     async Task OnInfoHandler(TaskItemDTO taskItem)
     {
-        await Task.Run(() => ModalShedule!.Open());
-    }
-    async Task Cancel()
-    {
-        await Task.Run(() => ModalShedule!.Close());
-        await Task.Run(() => ModalCancel!.Open());
-    }
-    async Task CloseShedule()
-    {
-        await Task.Run(() => ModalShedule!.Close());
-    }
-
-    async Task Submit()
-    {
-        await Task.Run(() => ModalCancel!.Close());
-        reason.Reason = string.Empty;
-    }
-    async Task Back()
-    {
-        await Task.Run(() => ModalCancel!.Close());
-        await Task.Run(() => ModalShedule!.Open());
-        reason.Reason = string.Empty;
-    }
-
-    async Task ShowQRcode()
-    {
-        await Task.Run(() => ModalShedule!.Close());
-        await Task.Run(() => ModalQR!.Open());
-    }
-    async Task CloseQR()
-    {
-        await Task.Run(() => ModalQR!.Close());
-    }
-
-    public class ReasonModel
-    {
-        [Required(ErrorMessage = "Требуется указать причину")]
-        [StringLength(1000, MinimumLength = 3, ErrorMessage = "Длина строки с именем должна быть не менее трех и не более тысячи символов")]
-        public string? Reason { get; set; }
+        await Task.Run(() => Modal!.Open(taskItem));
     }
 }

@@ -37,4 +37,10 @@
     <None Include="Pages\StudentPage.razor" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="Pages\StudentModal - Копировать.razor">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+  </ItemGroup>
+
 </Project>

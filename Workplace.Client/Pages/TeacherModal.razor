@@ -1,0 +1,106 @@
+﻿<Modal @ref="Modal">
+    <Title>
+        @if (ModalContent == "Shedule")
+        {
+            @TaskItem!.Name
+        }
+        @if (ModalContent == "QR")
+        {
+            <label>Отметка посещаемости</label>
+        }
+    </Title>
+    <Body>
+        @if (ModalContent == "Shedule")
+        {
+            <ul class="list-group">
+                <li class="list-group-item" aria-disabled="true">
+                    <label class="fw-bold" for="desc">@DisplayName(() => TaskItem!.Description)</label>
+                    <div id="desc">@TaskItem!.Description</div>
+                </li>
+                @if (TaskItem.StartTime.HasValue && TaskItem.EndTime.HasValue)
+                {
+                    <li class="list-group-item" aria-disabled="true">
+                        <label class="fw-bold" for="time">Время проведения</label>
+                        <div id="time"> @TaskItem.StartTime.Value.ToString("t") - @TaskItem.EndTime.Value.ToString("t")</div>
+                    </li>
+                }
+                <li class="list-group-item" aria-disabled="true">
+                    <label class="fw-bold" for="loc">@DisplayName(() => TaskItem!.Location)</label>
+                    <div id="loc">@TaskItem!.Location</div>
+                </li>
+            </ul>
+        }
+        @if (ModalContent == "QR")
+        {
+            <div class="row row-cols-1 row-cols-sm-2">
+                <div class="col">
+                    <img class="card-img" src="https://expertnov.ru/800/600/https/kelsys.by/wp-content/uploads/2021/04/blackberry-qr-code-variant_318-53463.jpg" />
+                </div>
+                <div class="col">
+                    <label class="fw-bold">Cтуденты</label>
+                    <ul class="list-group">
+                        @for (int i = 0; i < 6; i++)
+                        {
+                            <li>@TaskItem!.Teacher</li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        }
+    </Body>
+    <Footer>
+        @if (ModalContent == "Shedule")
+        {
+            <button type="button" class="btn btn-success" @onclick="ToQR">Сгенерировать QR-код</button>
+            <button type="button" class="btn btn-secondary" @onclick="Close">Закрыть</button>
+        }
+        @if (ModalContent == "QR")
+        {
+            <button type="button" class="btn btn-success" @onclick="Close">Провести пару</button>
+            <button type="button" class="btn btn-secondary" @onclick="ToShedule">Назад</button>
+        }
+    </Footer>
+</Modal>
+
+@code {
+    Modal? Modal { get; set; }
+
+    string? ModalContent;
+
+    TaskItemDTO? TaskItem = new();
+
+    public async Task Open(TaskItemDTO taskItem)
+    {
+        ModalContent = "Shedule";
+        TaskItem = await Task.Run(() => Clone(taskItem));
+        await Task.Run(() => Modal!.Open());
+    }
+
+    async Task Close()
+    {
+        await Task.Run(() => Modal!.Close());
+    }
+
+    void ToShedule()
+    {
+        ModalContent = "Shedule";
+    }
+
+    void ToQR()
+    {
+        ModalContent = "QR";
+    }
+
+    TaskItemDTO Clone(TaskItemDTO taskItem)
+    {
+        TaskItemDTO taskCopy = new();
+        taskCopy!.Id = taskItem.Id;
+        taskCopy!.Name = taskItem.Name;
+        taskCopy!.Description = taskItem.Description;
+        taskCopy!.StartTime = taskItem.StartTime;
+        taskCopy!.EndTime = taskItem.EndTime;
+        taskCopy!.Location = taskItem.Location;
+        taskCopy!.Teacher = taskItem.Teacher;
+        return taskCopy;
+    }
+}
