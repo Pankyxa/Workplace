@@ -1,10 +1,13 @@
-﻿@page "/teacher"
+﻿@inject IDataService data
+@inject NavigationManager nav
+
+@page "/student"
 
 <PageTitle>Список задач</PageTitle>
 
 <h3>Список задач</h3>
 
-<TeacherModal @ref="Modal"></TeacherModal>
+<StudentModal @ref="Modal"></StudentModal>
 
 <div class="row">
     <div class="col-auto">
@@ -16,7 +19,7 @@
         <button type="button" class="btn btn-secondary">
             Фильтры
         </button>
-    </div>
+    </div>   
 </div>
 <br />
 <div class="accordion">
@@ -39,7 +42,7 @@
                             <div class="card-header border-primary">
                                 <div class="row justify-content-between">
                                     <div class="col-auto">
-                                        <h5 class="card-title">@TaskItem.Name</h5>
+                                        <h5 class="card-title">@TaskItem!.Name</h5>
                                     </div>
                                     <div class="col-auto">
                                         <button type="button" class="button-without-outline btn btn-primary" @onclick:stopPropagation="true">
@@ -77,22 +80,18 @@
 </div>
 
 @code {
-    TeacherModal? Modal { get; set; }
+    StudentModal? Modal { get; set; }
 
-    TaskItemDTO TaskItem = new TaskItemDTO()
-        {
-            Id = 1,
-            Name = "Провести пару по функциональному анализу",
-            Description = "Тип пары: лекция",
-            StartTime = DateTime.Now,
-            EndTime = DateTime.Now.AddHours(1.5),
-            Location = "Корпус 7, аудитория 522",
-            Teacher = "Иванов Иван Иванович"
-        };
+    TaskItemDTO? TaskItem;
 
     public bool ShowTasks = true;
 
     private string? AccordStyle;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        TaskItem = await data.GetTaskItemAsync(4);
+    }
 
     protected override void OnInitialized()
     {
@@ -121,6 +120,7 @@
 
     async Task OnInfoHandler(TaskItemDTO taskItem)
     {
-        await Task.Run(() => Modal!.Open(taskItem));
+        await Task.Run(() => nav.NavigateTo($"/student/shedule/1/{taskItem.Id}"));
+        //await Task.Run(() => Modal!.Open(taskItem));
     }
 }

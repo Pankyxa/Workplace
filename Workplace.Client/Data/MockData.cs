@@ -32,6 +32,24 @@ namespace Workplace.Client.Data
                 Location = "Место 3",
                 Teacher = "Преподаватель 3"
             },
+            new TaskItemDTO() {
+                Id = 4,
+                Name = "Посетить пару по функциональному анализу",
+                Description = "Тип пары: лекция",
+                StartTime = DateTime.Now,
+                EndTime = DateTime.Now.AddHours(1.5),
+                Location = "Корпус 7, аудитория 522",
+                Teacher = "Иванов Иван Иванович"
+            },
+            new TaskItemDTO() {
+                Id = 5,
+                Name = "Провести пару по функциональному анализу",
+                Description = "Тип пары: лекция",
+                StartTime = DateTime.Now,
+                EndTime = DateTime.Now.AddHours(1.5),
+                Location = "Корпус 7, аудитория 522",
+                Teacher = "Иванов Иван Иванович"
+            }
         ];
 
         public async Task UpdateAsync(TaskItemDTO taskItem)

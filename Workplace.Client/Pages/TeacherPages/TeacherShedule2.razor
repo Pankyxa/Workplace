@@ -1,0 +1,48 @@
+﻿@inject IDataService data
+@inject NavigationManager nav
+
+@page "/teacher/shedule/2/{Id:int}"
+
+<PageTitle>@TaskItem!.Name</PageTitle>
+
+<h3>@TaskItem!.Name</h3>
+
+<div class="row row-cols-1 row-cols-sm-2">
+    <div class="col">
+        <img class="card-img" src="https://expertnov.ru/800/600/https/kelsys.by/wp-content/uploads/2021/04/blackberry-qr-code-variant_318-53463.jpg" />
+    </div>
+    <div class="col">
+        <label class="fw-bold">Cтуденты</label>
+        <ul class="list-group">
+            @for (int i = 0; i < 6; i++)
+            {
+                <li>@TaskItem!.Teacher</li>
+            }
+        </ul>
+    </div>
+</div>
+<br />
+<button type="button" class="btn btn-success" @onclick="async () => await Forward()">Начать пару</button>
+<button type="button" class="btn btn-secondary" @onclick="async () => await Back(Id)">Назад</button>
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    TaskItemDTO? TaskItem;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        TaskItem = await data.GetTaskItemAsync(Id);
+    }
+
+    async Task Forward()
+    {
+        await Task.Run(() => nav.NavigateTo("/teacher"));
+    }
+
+    async Task Back(int id)
+    {
+        await Task.Run(() => nav.NavigateTo($"/teacher/shedule/1/{id}"));
+    }  
+}

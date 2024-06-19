@@ -34,7 +34,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Pages\StudentPage.razor" />
+    <None Include="Pages\StudentPages\StudentPage.razor" />
   </ItemGroup>
 
   <ItemGroup>
