@@ -1,7 +1,7 @@
-<div>
-    <TaskItemGroup Header="Сегодня" Tasks="TodayTasks" OnFavorite="OnFavorite!" OnUpdate="OnUpdate!" OnDelete="OnDelete!" OnInfo="OnInfo!" ShowTasks="true"/>
-    <TaskItemGroup Header="Завтра" Tasks="TomorrowTasks" OnFavorite="OnFavorite" OnUpdate="OnUpdate" OnDelete="OnDelete" OnInfo="OnInfo" ShowTasks="false"/>
-    <TaskItemGroup Header="Послезавтра" Tasks="DayAfterTomorrowTasks" OnFavorite="OnFavorite" OnUpdate="OnUpdate" OnDelete="OnDelete" OnInfo="OnInfo" ShowTasks="false"/>
+<div class ="accordion">
+    <TaskItemGroup Header="Сегодня" Tasks="TodayTasks" OnFavorite="OnFavorite!" OnNotification="OnNotification!" OnUpdate="OnUpdate!" OnDelete="OnDelete!" OnInfo="OnInfo!" ShowTasks="true" />
+    <TaskItemGroup Header="Завтра" Tasks="TomorrowTasks" OnFavorite="OnFavorite" OnNotification="OnNotification" OnUpdate="OnUpdate" OnDelete="OnDelete" OnInfo="OnInfo" ShowTasks="false" />
+    <TaskItemGroup Header="Послезавтра" Tasks="DayAfterTomorrowTasks" OnFavorite="OnFavorite" OnNotification="OnNotification" OnUpdate="OnUpdate" OnDelete="OnDelete" OnInfo="OnInfo" ShowTasks="false" />
 </div>
 
 @code {
@@ -9,7 +9,10 @@
     public IEnumerable<TaskItemDTO>? Tasks { get; set; }
 
     [Parameter]
-    public Func<TaskItemDTO, Task>? OnFavorite { get; set; }
+    public Action<TaskItemDTO>? OnFavorite { get; set; }
+
+    [Parameter]
+    public Action<TaskItemDTO>? OnNotification { get; set; }
 
     [Parameter]
     public Func<TaskItemDTO, Task>? OnUpdate { get; set; }

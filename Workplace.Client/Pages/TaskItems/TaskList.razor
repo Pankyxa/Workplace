@@ -20,7 +20,7 @@ else
         </button>
     </div>
     
-    <TaskListGroups Tasks="_tasks" OnFavorite="OnFavoriteHandler" OnUpdate="OnUpdateHandler" OnDelete="OnDeleteHandler" OnInfo="OnInfoHandler"/>
+    <TaskListGroups Tasks="_tasks" OnFavorite="OnFavoriteHandler" OnNotification="OnNotificationHandler" OnUpdate="OnUpdateHandler" OnDelete="OnDeleteHandler" OnInfo="OnInfoHandler"/>
 }
 
 @code {
@@ -39,10 +39,14 @@ else
         await Task.Run(() => TaskModal!.Open(new TaskItemDTO()));
     }
 
-    async Task OnFavoriteHandler(TaskItemDTO taskItem)
+    void OnFavoriteHandler(TaskItemDTO taskItem)
     {
         taskItem.IsFavorite = !taskItem.IsFavorite;
-        _tasks = await data.GetAllAsync(); // Обновить список задач после обновления
+    }
+    
+    void OnNotificationHandler(TaskItemDTO taskItem)
+    {
+        taskItem.IsNotification = !taskItem.IsNotification;
     }
 
     async Task OnUpdateHandler(TaskItemDTO taskItem)

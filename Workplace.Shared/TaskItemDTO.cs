@@ -39,5 +39,7 @@ namespace Workplace.Shared
         public string? Teacher { get; set; }
 
         public bool IsFavorite { get; set; } = false;
+
+        public bool IsNotification { get; set; } = false;
     }
 }
