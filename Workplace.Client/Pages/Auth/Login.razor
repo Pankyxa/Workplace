@@ -1,0 +1,15 @@
+@* @page "/login" *@
+@* @using Workplace.Client.Services *@
+@* @inject IAuthService AuthService *@
+@* @inject NavigationManager Navigation *@
+@* *@
+@* <h3>Login</h3> *@
+@* <button @onclick="Login">Login with OAuth2</button> *@
+@* *@
+@* @code { *@
+@*     private async Task Login() *@
+@*     { *@
+@*         var authorizationUrl = AuthService.GetAuthorizationUrl(); *@
+@*         Navigation.NavigateTo(authorizationUrl, true); *@
+@*     } *@
+@* } *@

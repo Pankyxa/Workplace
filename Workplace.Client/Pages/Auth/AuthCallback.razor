@@ -1,0 +1,23 @@
+@* @page "/auth-callback" *@
+@* @using Workplace.Client.Services *@
+@* @inject IAuthService AuthService *@
+@* @inject NavigationManager Navigation *@
+@* @code { *@
+@*     protected override async Task OnInitializedAsync() *@
+@*     { *@
+@*         var uri = Navigation.ToAbsoluteUri(Navigation.Uri); *@
+@*         var queryParams = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query); *@
+@*         if (queryParams.TryGetValue("code", out var authorizationCode)) *@
+@*         { *@
+@*             var token = await AuthService.GetTokenAsync(authorizationCode); *@
+@*             if (!string.IsNullOrEmpty(token)) *@
+@*             { *@
+@*                 Navigation.NavigateTo("/"); *@
+@*             } *@
+@*             else *@
+@*             { *@
+@*                 Console.WriteLine("Authentication failed"); *@
+@*             } *@
+@*         } *@
+@*     } *@
+@* } *@

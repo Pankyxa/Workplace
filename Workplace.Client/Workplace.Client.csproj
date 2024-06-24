@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="8.0.6" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.5" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.5" PrivateAssets="all" />
   </ItemGroup>
@@ -31,10 +32,10 @@
   <ItemGroup>
     <_ContentIncludedByDefault Remove="Pages\StudentPage.razor" />
     <_ContentIncludedByDefault Remove="wwwroot\cbb94f83d35f1094c51434e07c75d806.png" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="Pages\StudentPages\StudentPage.razor" />
+    <_ContentIncludedByDefault Remove="Pages\TeacherPages\TeacherModal.razor" />
+    <_ContentIncludedByDefault Remove="Pages\TeacherPages\TeacherPage.razor" />
+    <_ContentIncludedByDefault Remove="Pages\TeacherPages\TeacherShedule1.razor" />
+    <_ContentIncludedByDefault Remove="Pages\TeacherPages\TeacherShedule2.razor" />
   </ItemGroup>
 
   <ItemGroup>
