@@ -1,4 +1,4 @@
-<Modal @ref="Modal">
+<ModalWindow @ref="Modal">
     <Title>@TaskItem!.Name</Title>
     <Body>
         <ul class="list-group">
@@ -26,33 +26,33 @@
     <Footer>
         <button type="button" class="btn btn-danger" @onclick="Cancel">Закрыть</button>
     </Footer>
-</Modal>
+</ModalWindow>
 
 @code {
-Modal? Modal { get; set; }
-TaskItemDTO? TaskItem { get; set; } = new();
+    ModalWindow? Modal { get; set; }
+    TaskItemDTO? TaskItem { get; set; } = new();
 
-public void Open(TaskItemDTO taskItem)
-{
-TaskItem = Clone(taskItem);
-Modal!.Open();
-}
+    public void Open(TaskItemDTO taskItem)
+    {
+        TaskItem = Clone(taskItem);
+        Modal!.Open();
+    }
 
-async Task Cancel()
-{
-await Task.Run(() => Modal!.Close());
-}
+    async Task Cancel()
+    {
+        await Task.Run(() => Modal!.Close());
+    }
 
-TaskItemDTO Clone(TaskItemDTO taskItem)
-{
-TaskItemDTO taskCopy = new();
-taskCopy!.Id = taskItem.Id;
-taskCopy!.Name = taskItem.Name;
-taskCopy!.Description = taskItem.Description;
-taskCopy!.StartTime = taskItem.StartTime;
-taskCopy!.EndTime = taskItem.EndTime;
-taskCopy!.Location = taskItem.Location;
-taskCopy!.Teacher = taskItem.Teacher;
-return taskCopy;
-}
+    TaskItemDTO Clone(TaskItemDTO taskItem)
+    {
+        TaskItemDTO taskCopy = new();
+        taskCopy!.Id = taskItem.Id;
+        taskCopy!.Name = taskItem.Name;
+        taskCopy!.Description = taskItem.Description;
+        taskCopy!.StartTime = taskItem.StartTime;
+        taskCopy!.EndTime = taskItem.EndTime;
+        taskCopy!.Location = taskItem.Location;
+        taskCopy!.Teacher = taskItem.Teacher;
+        return taskCopy;
+    }
 }

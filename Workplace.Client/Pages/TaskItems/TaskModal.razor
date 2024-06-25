@@ -1,4 +1,4 @@
-﻿<Modal @ref="Modal">
+﻿<ModalWindow @ref="Modal">
     <Title>Форма редактирования задачи</Title>
     <Body>
         <EditForm Model="TaskItem" OnValidSubmit="Submit"> 
@@ -44,10 +44,10 @@
             <button type="button" class="btn btn-secondary" @onclick="async () => await Cancel()">Отменить</button>
         </EditForm>
     </Body>
-</Modal>
+</ModalWindow>
 
 @code {
-    Modal? Modal { get; set; }
+    ModalWindow? Modal { get; set; }
     TaskItemDTO? TaskItem { get; set; } = new();
 
     [Parameter, EditorRequired]
