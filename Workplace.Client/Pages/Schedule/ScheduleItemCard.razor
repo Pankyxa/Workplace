@@ -1,0 +1,73 @@
+﻿@using Workplace.Shared.Schedule
+
+<div class="card" style="margin-bottom: 10px; padding: 10px;">
+    <h6 style="font-weight: 700;">@SItem!.LessonInfo!.Name <span style="opacity: 0.6;">@SItem.TimeSpending.TimeOfDay - @SItem.TimeSpending.TimeOfDay.Add(new TimeSpan(1, 35, 0))</span></h6>
+    @if (SItem.LT == LessonType.Практика)
+    {
+        <h6 style="background-color: #9ec5fe; width: 80px; text-align: center; border-radius: 2px;">@SItem.LT</h6>
+    }
+    else if (SItem.LT == LessonType.Лабораторная_работа)
+    {
+        <h6 style="background-color: #fecba1; width: 180px; text-align: center; border-radius: 2px;">@SItem.LT</h6>
+    }
+    else if (SItem.LT == LessonType.Лекция)
+    {
+        <h6 style="background-color: #a6e9d5; width: 65px; text-align: center; border-radius: 2px;">@SItem.LT</h6>
+    }
+    else if (SItem.LT == LessonType.Экзамен)
+    {
+        <h6 style="background-color: #c5b3e6; width: 75px; text-align: center; border-radius: 2px;">@SItem.LT</h6>
+    }
+    else
+    {
+        <h6 style="background-color: #f1aeb5; width: 115px; text-align: center; border-radius: 2px;">@SItem.LT</h6>
+    }
+    <h6>@SItem.Location</h6>
+    <h6 style="font-style: italic; opacity: 0.6;">@SItem.LessonInfo.Teachers![(int)SItem.LT > 2 ? (int)SItem.LT - 3 : (int)SItem.LT]</h6>
+    <div class="card" style="border-color: #8540f5;">
+        <div class="card-header" style="background-color: #e0cffc;">
+            <button type="button" class="btn btn-link" style="text-decoration: none; color: #000; border: none; width: 100%;" @onclick="ChangeOpenStudents"> Количество участников: @stdCount</button>
+        </div>
+        @if (openStudents)
+        {
+            <ul class="list-group list-group-flush" style="border-color: #8540f5;">
+                @foreach (var group in SItem.Groups!)
+                {
+                    foreach (var student in group.Students!)
+                    {
+                        <li class="list-group-item" style="overflow-wrap: break-word;">@student.Name <span style="opacity: 0.6; position: absolute; right: 0; margin-right: 15px;">@group.Name</span></li>
+                    }
+                }
+            </ul>
+        }
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public ScheduleItem? SItem { get; set; }
+    [Parameter]
+    public bool openStudents { get; set; } = false;
+    [Parameter]
+    public int stdCount { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        stdCount = await CountStudents(SItem!);
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        stdCount = await CountStudents(SItem!);
+    }
+
+    public async Task ChangeOpenStudents()
+    {
+        await Task.Run(() => openStudents = !openStudents);
+    }
+
+    public async Task<int> CountStudents(ScheduleItem si)
+    {
+        return await Task.FromResult<int>(si.Groups!.Sum(s => s.Students!.Count()));
+    }
+}

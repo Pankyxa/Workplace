@@ -1,0 +1,78 @@
+@page "/schedule"
+
+@using Workplace.Shared.Schedule
+@using System.ComponentModel.DataAnnotations;
+
+@inject IScheduleDataService data
+
+<PageTitle>Расписание</PageTitle>
+
+<style>
+    .alert_date {
+        width: 30%; 
+        position: absolute; 
+        right: 0; 
+        top: 0;
+        z-index: 10;
+    }
+</style>
+
+@if (items == null)
+{
+    <p>Loading ...</p>
+}
+else
+{
+    @if (InvalidDate) {
+        <Alert Color="AlertColor.Danger" class="alert_date" Dismissable="true">Введена некорректная дата</Alert>
+        InvalidDate = false;
+    }
+    <div class="container" style="display: flex; justify-content: center;">
+        <div class="schedule" style="width: 50%;">
+            @foreach (var si in items)
+            {
+                <div class="card" style="width: 80%; margin-bottom: 20px;">
+                    <h5 class="card-header" style="background-color: #520dc2; color: #fff; font-weight: 700;">@si!.TimeSpending.Date</h5>
+                    <div class="card-body">
+                            <ScheduleItemCard SItem="si"></ScheduleItemCard>
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="filtres" style="width: 30%;">
+            <InputDate class="form-control" Type="InputDateType.Date" @bind-Value="DateOfStart" style="width: 50%; margin-bottom: 10px;"/>
+            <InputDate class="form-control" Type="InputDateType.Date" @bind-Value="DateOfEnd" style="width: 50%; margin-bottom: 10px;"/>
+            <InputText class="form-control" placeholder="Найти студента" @bind-Value="studentToSearch" style="margin-bottom: 10px;"/>
+            <button type="button" class="btn btn-outline-primary" @onclick="Search">Поиск расписания</button>
+        </div>
+    </div>
+}
+
+@code {
+    private List<ScheduleItem>? items { get; set; }
+    [Parameter]
+    public DateTime DateOfStart { get; set; }
+    [Parameter]
+    public DateTime DateOfEnd { get; set; }
+    [Parameter]
+    public string? studentToSearch { get; set; }
+
+    public bool InvalidDate { get; set; }
+
+    public async Task Search()
+    {
+        if (DateOfEnd.CompareTo(DateOfStart) < 0) {
+            InvalidDate = true;
+        }
+        else {
+            items = await data.GetDayRangeAsync(DateOfStart, DateOfEnd, studentToSearch!);
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        DateOfStart = DateTime.Now;
+        DateOfEnd = DateTime.Now.AddDays(3);
+        items = await data.GetDayRangeAsync(DateOfStart, DateOfEnd, studentToSearch!);
+    }
+}
